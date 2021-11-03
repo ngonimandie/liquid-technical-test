@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import cartReducer from './components/reducers/cartReducer';
+import './index.css'
 
 const store = createStore(cartReducer);
 ReactDOM.render(
