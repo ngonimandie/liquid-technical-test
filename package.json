@@ -14,8 +14,10 @@
     "@testing-library/user-event": "^12.1.10",
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.3",
+    "express": "^4.17.1",
     "firebase": "^9.2.0",
     "nodemailer": "^6.7.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "ol": "^6.9.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -28,10 +30,11 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start-client": "react-scripts start",
+    "build": "react-scripts build && (cd server && yarn install)",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start": "cd server && yarn start"
   },
   "eslintConfig": {
     "extends": [

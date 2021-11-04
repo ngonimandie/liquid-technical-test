@@ -23,8 +23,10 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const nodemailer = require("nodemailer")
 
+//Checkout Mail
+const nodemailer = require("nodemailer")
+var smtpTransport = require('nodemailer-smtp-transport');
 
 class Cart extends Component {
     constructor(props) {
@@ -53,18 +55,22 @@ class Cart extends Component {
 
         let testAccount = nodemailer.createTestAccount();
 
-        // create reusable transporter object using the default SMTP transport
+        // create reusable transporter object using SMTP transport
         let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false,
+            service: 'gmail',
+            host: 'smtp.gmail.com',
             auth: {
-                user: testAccount.user, // generated ethereal user
-                pass: testAccount.pass, // generated ethereal password
+                user: process.env.REACT_APP_NODEMAILER_SENDER_EMAIL, 
+                pass: process.env.REACT_APP_NODEMAILER_SENDER_PASSWORD, 
             },
         });
-
-        // send mail with defined transport object
+        var mailOptions = {
+            from: '"Ngoni \'s cart 👻" '+ process.env.REACT_APP_NODEMAILER_SENDER_EMAIL,
+            to: emailRecepient,
+            subject: 'Checkout Confirmation ✔',
+            text: "Items bought are worth:" + amount + "To complete purchase, contact the Liquid thought team ", // plain text body
+          };
+        /*
         let info = transporter.sendMail({
             from: '"Ngoni \'s cart 👻" ' + (process.env.REACT_APP_NODEMAILER_SENDER_EMAIL), // sender address
             to: emailRecepient, // buyer's email address
@@ -73,8 +79,15 @@ class Cart extends Component {
             html: "Items bought are worth:" + amount + "Io complete purchase, contact the Liquid thought team ", // html body
         });
 
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        */
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log( 'Failed Email sending with response:' +error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          }); 
+        
     };
     render() {
         let user = firebase.auth().currentUser;
