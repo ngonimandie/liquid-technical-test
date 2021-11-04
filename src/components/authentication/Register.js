@@ -6,7 +6,6 @@ import {
   auth,
   registerWithEmailAndPassword
 } from "./firebase";
-import "./Register.css";
 
 // openlayers
 import GeoJSON from 'ol/format/GeoJSON'

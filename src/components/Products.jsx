@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { addToCart } from './actions/cartActions'
 import PRODUCT_IMAGE from '../assets/images/liquid-product.png';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 
 
@@ -11,6 +11,7 @@ function Products(props) {
     const handleClick = (id) => {
         props.addToCart(id);
     }
+    const history= useHistory();
 
 
 
@@ -33,7 +34,7 @@ function Products(props) {
                                         <img src={PRODUCT_IMAGE} alt="product_image" />
                                         <div className="overlay">
                                             <div className="text">
-                                                {item.isAvailable ?<Button onClick= {handleClick(item.id)}>Add</Button> : <h3>Out of Stock</h3>}
+                                                {item.isAvailable ?<Button className="add-to-cart-btn" onClick={()=>{handleClick(item.id)}}>Add to Cart</Button> : <h3>Out of Stock</h3>}
                                                 
                                                 
                                             </div>
@@ -52,10 +53,16 @@ function Products(props) {
             </div>
             </div>
             
-            <div className="row container heading">
+            <div className="row container heading view-cart-btn">
                 <h2 className="p-5 text-center">
                     End of products list
                 </h2>
+                
+            </div>
+            <div className="view-cart-btn">
+            <Button onClick={() => history.push('/cart')} >
+                    View Cart
+                </Button>
             </div>
         </div>
 

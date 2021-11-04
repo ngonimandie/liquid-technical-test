@@ -14,13 +14,13 @@ import { DeleteForeverOutlined } from '@material-ui/icons';
 import { Button } from '@mui/material';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDCQpBqVijBnhT8fXlaAeP6lIHkaiFaWDQ",
-    authDomain: "test-48da0.firebaseapp.com",
-    projectId: "test-48da0",
-    storageBucket: "test-48da0.appspot.com",
-    messagingSenderId: "210396814867",
-    appId: "1:210396814867:web:b04adca6399f8ce70669e6"
-  };
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID
+};
 
 firebase.initializeApp(firebaseConfig);
 const nodemailer = require("nodemailer")
@@ -66,7 +66,7 @@ class Cart extends Component {
 
         // send mail with defined transport object
         let info = transporter.sendMail({
-            from: '"Ngoni \'s cart 👻" ' + (process.env.NODEMAILER_SENDER_EMAIL), // sender address
+            from: '"Ngoni \'s cart 👻" ' + (process.env.REACT_APP_NODEMAILER_SENDER_EMAIL), // sender address
             to: emailRecepient, // buyer's email address
             subject: "Checkout Confirmation ✔", // Subject line
             text: "Items bought are worth:" + amount + "To complete purchase, contact the Liquid thought team ", // plain text body
@@ -124,11 +124,11 @@ class Cart extends Component {
 
                     <li className="collection-item"><b>Total: ZAR {this.props.total} </b></li>
                 </div>
-                <div className="checkout">
-                    <Button className="waves-effect waves-light btn" onClick={() => { 
+                <div className=" view-cart-btn checkout">
+                    <Button className="waves-effect waves-light btn " onClick={() => {
                         console.log(user.email)
-                        this.handleCheckOut(user.email, this.props.total) 
-                        }}>Checkout</Button>
+                        this.handleCheckOut(user.email, this.props.total)
+                    }}>Checkout to Email</Button>
                 </div>
             </div>
         )
