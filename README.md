@@ -1,10 +1,15 @@
 ### Installation Instructions 
 
 1. Clone the repo
-2. Run 'yarn install' in your CMD/terminal
-3. add the .env file (Get it from Ngoni or Request instructions on how to create your own variables)
-4. To test on you Local machine, run 'yarn start'
+2. Run the command 'yarn install' in the root of the project
+3. Run the command 'yarn install' in the server directory (cd server)
+5. add the .env file (Get it from Ngoni or Request instructions on how to create your own variables)
+6. To test on you Local machine, run 'yarn build' then 'yarn start' once the build is done
+7. The app should run on localhost:5000 or a different port is you set it as an environment variable
 
+
+
+*** eMail service is being created on the node backend
 *** Make sure you sign up with the email address that will be able to receive emails on checkout (for bonus email functionality)
 *** Check the delivery address box for adding an address (for bonus Maps functionality)
 
