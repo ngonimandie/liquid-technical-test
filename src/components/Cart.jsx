@@ -24,15 +24,14 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-//Checkout Mail
-const nodemailer = require("nodemailer")
-var smtpTransport = require('nodemailer-smtp-transport');
 
 class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: 0
+            user: '',
+            email: '',
+            checkOutMessage: ''
         };
     }
     //to remove the item completely
@@ -50,12 +49,28 @@ class Cart extends Component {
 
     //to send email as Checkout
     handleCheckOut = async (email, amount) => {
+        //e.preventDefault();
+        console.log('Posting checkout with data:'+{ email, amount });
+        const response = await fetch("/checkout", { 
+          method: 'POST', 
+          headers: { 
+              'Content-type': 'application/json'
+          }, 
+          body: JSON.stringify({email, amount}) 
+      }); 
+        const resData = await response.json(); 
+        if (resData.status === 'success'){
+          alert("Message Sent."); 
+          this.resetForm()
+      }else if(resData.status === 'fail'){
+          alert("Message failed to send.")
+      }
+      };
+    submitRequest1 = async (email, amount) => {
 
-        const emailRecepient = email + "";
 
-        let testAccount = nodemailer.createTestAccount();
 
-        // create reusable transporter object using SMTP transport
+        /* create reusable transporter object using SMTP transport
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
@@ -78,16 +93,16 @@ class Cart extends Component {
             text: "Items bought are worth:" + amount + "To complete purchase, contact the Liquid thought team ", // plain text body
             html: "Items bought are worth:" + amount + "Io complete purchase, contact the Liquid thought team ", // html body
         });
-
-        */
-        transporter.sendMail(mailOptions, function(error, info){
+transporter.sendMail(mailOptions, function(error, info){
             if (error) {
               console.log( 'Failed Email sending with response:' +error);
             } else {
               console.log('Email sent: ' + info.response);
             }
           }); 
-        
+        */
+
+
     };
     render() {
         let user = firebase.auth().currentUser;

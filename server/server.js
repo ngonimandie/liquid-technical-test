@@ -4,35 +4,56 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
+let nodemailer = require('nodemailer');
+
 const PORT = process.env.PORT || 5000;
 
 const buildPath = path.join(__dirname, '..', 'build');
 app.use(express.static(buildPath));
 app.use(cors());
 
-app.get('/jobs', async (req, res) => {
-  try {
-    let { description = '', full_time, location = '', page = 1 } = req.query;
-
-    description = description ? encodeURIComponent(description) : '';
-    location = location ? encodeURIComponent(location) : '';
-    full_time = full_time === 'true' ? '&full_time=true' : '';
-    if (page) {
-      page = parseInt(page);
-      page = isNaN(page) ? '' : `&page=${page}`;
-    }
-    const query = `https://jobs.github.com/positions.json?description=${description}&location=${location}${full_time}${page}`;
-    const result = await axios.get(query);
-    res.send(result.data);
-  } catch (error) {
-    res.status(400).send('Error while getting list of jobs.Try again later.');
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.REACT_APP_NODEMAILER_SENDER_EMAIL,
+    pass: process.env.REACT_APP_NODEMAILER_SENDER_PASSWORD,
+  },
+});
+// verify connection configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Server is ready to take our messages");
   }
 });
-app.get('/home', function (req, res) {
-  res.send('home')
-})
-app.get('/cart', function (req, res) {
-  res.send('cart')
+
+app.post('/checkout', (req, res, next) => {
+  var email = req.body.email
+  var message = req.body.message
+  var content = `name: ${name} \n email: ${email} \n message: ${message} `
+
+  var mail = {
+    from: name,
+    to: name,
+    message: subject,
+    text: content
+  }
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      res.json({
+        status: 'fail'
+      })
+    } else {
+      res.json({
+        status: 'success'
+      })
+    }
+  })
 })
 
 app.listen(PORT, () => {
